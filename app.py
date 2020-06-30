@@ -17,6 +17,7 @@ from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///data.db') # get the env. variable (from heroku) or sqlite db file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'my secret'
@@ -34,6 +35,12 @@ api.add_resource(UserRegister, '/register')   #  i.e.: http://127.0.0.1:5000/reg
 
 if __name__ == '__main__': # this gives the ability to import app.py without runing the application
     db.init_app(app)
+
+    if app.config['DEBUG']:
+        @app.before_first_request
+        def create_tables():
+            db.create_all()
+
     app.run(port=5000, debug=True)
 
 # (on terminal)
