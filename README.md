@@ -72,7 +72,7 @@ List the libraries installed
     six==1.15.0
     Werkzeug==1.0.1
 
-Initialize repository on code dir
+Use GIT to version the code
 
     $ cd code
     $ git init
@@ -84,6 +84,31 @@ Initialize repository on code dir
     $ git add .
     $ git commit -m "First commit, basics python-flask rest API with stores, items and user authentication"
 
-Create repo on github
+Create repo on Github and push the code to a remote repo (git:fbrcode)
 
-git@github.com:fbrcode/py-flask-rest-api.git
+    $ git remote add origin git@github.com:fbrcode/py-flask-rest-api.git
+    $ git push -u origin master
+
+Heroku deployment:
+
+    - Create account at heroku
+    - Create application with unique name
+    - Link github account to heroku
+    - Create deployment files on code directory
+      - runtime.txt > python version
+        - python-3.8.3
+      - requirements.txt > libraries being used in the project
+        - Flask
+        - Flask-RESTful
+        - Flask-JWT
+        - Flask-SQLAlchemy
+        - uwsgi
+      - uwsgi.ini
+        - [uwsgi]
+        - http-socket = :$(PORT)
+        - master = true
+        - die-on-term = true
+        - moduele = app:app
+        - memory-report = true
+      - Procfile
+        - web: uwsgi uwsgi.ini
